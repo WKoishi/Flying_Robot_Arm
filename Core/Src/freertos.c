@@ -27,6 +27,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "usb_uart.h"
+#include "my_time.h"
 
 /* USER CODE END Includes */
 
@@ -132,14 +133,20 @@ void StartDefaultTask(void const * argument)
   /* init code for USB_DEVICE */
   MX_USB_DEVICE_Init();
   /* USER CODE BEGIN StartDefaultTask */
+    struct Time_Object time_test;
+    
   /* Infinite loop */
   for(;;)
   {
 	  HAL_GPIO_WritePin(LED_ON_BOARD_GPIO_Port, LED_ON_BOARD_Pin, GPIO_PIN_SET);
-	  osDelay(500);
+      get_time_period(&time_test);
+      usb_printf("now: %f  dt: %f  longteststringcnx23uibffrw3kolq874fhbuo3wlugb\r\n", time_test.Now_Time, time_test.Time_Delta);
+	  osDelay(445);
+      
 	  HAL_GPIO_WritePin(LED_ON_BOARD_GPIO_Port, LED_ON_BOARD_Pin, GPIO_PIN_RESET);
-	  osDelay(500);
-	  usb_printf("koishi test\r\n");
+      get_time_period(&time_test);
+      usb_printf("now: %f  dt: %f  longteststringwweiucnq93o84fhpq9ufvb98u3bcnsd\r\n", time_test.Now_Time, time_test.Time_Delta);
+	  osDelay(555);
   }
   /* USER CODE END StartDefaultTask */
 }

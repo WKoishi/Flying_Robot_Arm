@@ -313,7 +313,7 @@
           </ArmAdsMisc>
           <Cads>
             <interw>1</interw>
-            <Optim>2</Optim>
+            <Optim>1</Optim>
             <oTime>0</oTime>
             <SplitLS>0</SplitLS>
             <OneElfS>1</OneElfS>
@@ -339,7 +339,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32H743xx, TFT18</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;     ../USB_DEVICE/App;     ../USB_DEVICE/Target;     ../Drivers/STM32H7xx_HAL_Driver/Inc;     ../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy;     ../Middlewares/Third_Party/FreeRTOS/Source/include;     ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS;     ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F;     ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc;     ../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc;     ../Drivers/CMSIS/Device/ST/STM32H7xx/Include;     ../Drivers/CMSIS/Include;     ..\bsp\ST7735</IncludePath>
+              <IncludePath>../Core/Inc;../USB_DEVICE/App;../USB_DEVICE/Target;../Drivers/STM32H7xx_HAL_Driver/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy;../Middlewares/Third_Party/FreeRTOS/Source/include;../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS;../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F;../Middlewares/ST/STM32_USB_Device_Library/Core/Inc;../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc;../Drivers/CMSIS/Device/ST/STM32H7xx/Include;../Drivers/CMSIS/Include;..\bsp\ST7735;..\application\algorithm;..\bsp</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -885,7 +885,7 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>boards</GroupName>
+          <GroupName>bsp</GroupName>
           <Files>
             <File>
               <FileName>lcd.c</FileName>
@@ -902,15 +902,30 @@
               <FileType>1</FileType>
               <FilePath>..\bsp\ST7735\st7735_reg.c</FilePath>
             </File>
+            <File>
+              <FileName>my_time.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\bsp\my_time.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
-          <GroupName>application</GroupName>
+          <GroupName>app/LCD</GroupName>
           <Files>
             <File>
               <FileName>lcd_task.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\application\lcd_show\lcd_task.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>app/algorithm</GroupName>
+          <Files>
+            <File>
+              <FileName>pid.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\application\algorithm\pid.c</FilePath>
             </File>
           </Files>
         </Group>
