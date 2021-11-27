@@ -87,7 +87,7 @@ void LCD_Test(void)
 		delay_ms(10);
 
 		if (get_tick() - tick <= 1000)
-			LCD_SetBrightness((get_tick() - tick) * 100 / 1000);
+			LCD_SetBrightness((get_tick() - tick) * 500 / 1000);
 		else if (get_tick() - tick <= 3000)
 		{
 			sprintf((char *)&text, "%03d", 1 + (get_tick() - tick - 1000) / 20);
@@ -112,7 +112,7 @@ void LCD_Test(void)
 	sprintf((char *)&text, "LCD ID:0x%X", st7735_id);
 	LCD_ShowString(4, 40, ST7735Ctx.Width, 16, 16, text);
 
-	LCD_Light(100, 200);
+	LCD_Light(500, 200);
 }
 
 void LCD_SetBrightness(uint32_t Brightness)
