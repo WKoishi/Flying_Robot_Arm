@@ -20,14 +20,16 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "cmsis_os.h"
+#include "dma.h"
 #include "spi.h"
 #include "tim.h"
+#include "usart.h"
 #include "usb_device.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "servo_uart.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -92,9 +94,12 @@ int main(void)
   MX_GPIO_Init();
   MX_TIM1_Init();
   MX_SPI4_Init();
+  MX_DMA_Init();
+  MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
   HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_2);
   __HAL_TIM_SetCompare(&htim1, TIM_CHANNEL_2, 0);
+  servo_receive_init();
   /* USER CODE END 2 */
 
   /* Call init function for freertos objects (in freertos.c) */
