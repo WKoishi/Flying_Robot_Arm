@@ -1,4 +1,5 @@
 #include "usb_uart.h"
+#include "stdarg.h"
 #include "usbd_cdc_if.h"
 
 extern uint8_t UserRxBufferFS[APP_RX_DATA_SIZE];
