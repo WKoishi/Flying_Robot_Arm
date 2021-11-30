@@ -2,6 +2,7 @@
 #include "font.h"
 #include "spi.h"
 #include "tim.h"
+#include "stdarg.h"
 
 //SPIÏÔÊ¾ÆÁ½Ó¿Ú
 //LCD_RST
@@ -43,10 +44,21 @@ ST7735_IO_t st7735_pIO = {
 ST7735_Object_t st7735_pObj;
 uint32_t st7735_id;
 
-void LCD_Test(void)
+#define LCD_TEXT_LENGTH 50
+uint8_t lcd_text_buf[LCD_TEXT_LENGTH];
+
+void LCD_printf(uint16_t x, uint16_t y, uint16_t width, uint16_t height, uint8_t size, const char *format, ...)
 {
-	uint8_t text[20];
-	
+    va_list args;
+ 
+    va_start(args, format);
+    vsnprintf((char *)lcd_text_buf, LCD_TEXT_LENGTH, (char *)format, args);
+    va_end(args);
+    LCD_ShowString(x, y, width, height, size, lcd_text_buf);
+}
+
+void LCD_init(void)
+{
 	#ifdef TFT96
 	ST7735Ctx.Orientation = ST7735_ORIENTATION_LANDSCAPE_ROT180;
 	ST7735Ctx.Panel = HannStar_Panel;
@@ -67,8 +79,7 @@ void LCD_Test(void)
 	LCD_SetBrightness(0);
 	ST7735_LCD_Driver.FillRect(&st7735_pObj, 0, 0, ST7735Ctx.Width, ST7735Ctx.Height, BLACK);
 	
-	sprintf((char *)&text, "initialize...");
-	LCD_ShowString(4, ST7735Ctx.Height - 21, ST7735Ctx.Width, 12, 12, text);
+    LCD_printf(4, ST7735Ctx.Height - 21, ST7735Ctx.Width, 12, 12, "initialize...");
 	ST7735_LCD_Driver.FillRect(&st7735_pObj, 4,  4, 16, 8, RED);
 	ST7735_LCD_Driver.FillRect(&st7735_pObj, 24, 4, 16, 8, GREEN);
 	ST7735_LCD_Driver.FillRect(&st7735_pObj, 44, 4, 16, 8, BLUE);
@@ -81,7 +92,7 @@ void LCD_Test(void)
 //	ST7735_LCD_Driver.DrawBitmap(&st7735_pObj,0,0,WeActStudiologo_128_160);	
 //	#endif
 	
-  uint32_t tick = get_tick();
+    uint32_t tick = get_tick();
 	while (HAL_GPIO_ReadPin(KEY_GPIO_Port, KEY_Pin) != GPIO_PIN_SET)
 	{
 		delay_ms(10);
@@ -90,9 +101,10 @@ void LCD_Test(void)
 			LCD_SetBrightness((get_tick() - tick) * 500 / 1000);
 		else if (get_tick() - tick <= 3000)
 		{
-			sprintf((char *)&text, "%03d", 1 + (get_tick() - tick - 1000) / 20);
-			LCD_ShowString(ST7735Ctx.Width - 30, 1, ST7735Ctx.Width, 16, 16, text);
-			ST7735_LCD_Driver.FillRect(&st7735_pObj, 0, ST7735Ctx.Height - 4, (get_tick() - tick - 1000) * ST7735Ctx.Width / 2000, 4, LIGHTBLUE);
+            LCD_printf(ST7735Ctx.Width - 30, 1, ST7735Ctx.Width, 16, 16, 
+                        "%03d", 1 + (get_tick() - tick - 1000) / 20);
+			ST7735_LCD_Driver.FillRect(&st7735_pObj, 0, ST7735Ctx.Height - 4, 
+                                        (get_tick() - tick - 1000) * ST7735Ctx.Width / 2000, 4, TIANYI_BLUE);
 		}
 		else if (get_tick() - tick > 3000)
 			break;
@@ -104,25 +116,22 @@ void LCD_Test(void)
 	LCD_Light(0, 300);
 
 	ST7735_LCD_Driver.FillRect(&st7735_pObj, 0, 0, ST7735Ctx.Width,ST7735Ctx.Height, BLACK);
-
-	sprintf((char *)&text, "WeAct Studio");
-	LCD_ShowString(4, 4, ST7735Ctx.Width, 16, 16, text);
-	sprintf((char *)&text, "STM32H7xx 0x%X", HAL_GetDEVID());
-	LCD_ShowString(4, 22, ST7735Ctx.Width, 16, 16, text);
-	sprintf((char *)&text, "LCD ID:0x%X", st7735_id);
-	LCD_ShowString(4, 40, ST7735Ctx.Width, 16, 16, text);
+    
+    LCD_printf(4, 4, ST7735Ctx.Width, 16, 16, "WeAct Studio");
+    LCD_printf(4, 22, ST7735Ctx.Width, 16, 16, "STM32H7xx 0x%X", HAL_GetDEVID());
+    LCD_printf(4, 40, ST7735Ctx.Width, 16, 16, "LCD ID:0x%X", st7735_id);
 
 	LCD_Light(500, 200);
 }
 
 void LCD_SetBrightness(uint32_t Brightness)
 {
-	__HAL_TIM_SetCompare(LCD_Brightness_timer, LCD_Brightness_channel, Brightness);
+    __HAL_TIM_SetCompare(LCD_Brightness_timer, LCD_Brightness_channel, Brightness);
 }
 
 uint32_t LCD_GetBrightness(void)
 {
-		return __HAL_TIM_GetCompare(LCD_Brightness_timer, LCD_Brightness_channel);
+    return __HAL_TIM_GetCompare(LCD_Brightness_timer, LCD_Brightness_channel);
 }
 
 
