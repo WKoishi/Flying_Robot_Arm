@@ -11,12 +11,13 @@ static uint32_t get_hal_base_timer_cnt(void)
 
 void get_time_period(struct Time_Object *time_obj)
 {
-    uint32_t tim_cnt = get_hal_base_timer_cnt();
-    
+    uint32_t tim_cnt;
+
     time_obj->Last_Time = time_obj->Now_Time;
+    tim_cnt = get_hal_base_timer_cnt();
     time_obj->Now_Time = HAL_GetTick() + (float)tim_cnt / HAL_TIMER_PERIOD_F;  //µ¥Î»ms
-    time_obj->Time_Delta = (time_obj->Now_Time - time_obj->Last_Time);
-    time_obj->Time_Delta_INT = (uint16_t)(time_obj->Time_Delta);
+    time_obj->Time_Delta = time_obj->Now_Time - time_obj->Last_Time;
+    time_obj->Time_Delta_INT = (uint16_t)time_obj->Time_Delta;
 }
 
 

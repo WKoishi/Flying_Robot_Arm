@@ -1,5 +1,4 @@
 #include "lcd.h"
-#include "font.h"
 #include "spi.h"
 #include "tim.h"
 #include "stdarg.h"
@@ -47,18 +46,20 @@ uint32_t st7735_id;
 #define LCD_TEXT_LENGTH 50
 uint8_t lcd_text_buf[LCD_TEXT_LENGTH];
 
-void LCD_printf(uint16_t x, uint16_t y, uint16_t width, uint16_t height, uint8_t size, const char *format, ...)
+void LCD_printf(struct StringHandler* handler, const char *format, ...)
 {
     va_list args;
  
     va_start(args, format);
     vsnprintf((char *)lcd_text_buf, LCD_TEXT_LENGTH, (char *)format, args);
     va_end(args);
-    LCD_ShowString(x, y, width, height, size, lcd_text_buf);
+    LCD_ShowString(handler, lcd_text_buf);
 }
 
 void LCD_init(void)
 {
+    struct StringHandler init_message;
+    
 	#ifdef TFT96
 	ST7735Ctx.Orientation = ST7735_ORIENTATION_LANDSCAPE_ROT180;
 	ST7735Ctx.Panel = HannStar_Panel;
@@ -77,12 +78,19 @@ void LCD_init(void)
 	ST7735_LCD_Driver.ReadID(&st7735_pObj,&st7735_id);
 	
 	LCD_SetBrightness(0);
-	ST7735_LCD_Driver.FillRect(&st7735_pObj, 0, 0, ST7735Ctx.Width, ST7735Ctx.Height, BLACK);
+	ST7735_LCD_Driver.FillRect(&st7735_pObj, 0, 0, ST7735Ctx.Width, ST7735Ctx.Height, COLOR_BLACK);
 	
-    LCD_printf(4, ST7735Ctx.Height - 21, ST7735Ctx.Width, 12, 12, "initialize...");
-	ST7735_LCD_Driver.FillRect(&st7735_pObj, 4,  4, 16, 8, RED);
-	ST7735_LCD_Driver.FillRect(&st7735_pObj, 24, 4, 16, 8, GREEN);
-	ST7735_LCD_Driver.FillRect(&st7735_pObj, 44, 4, 16, 8, BLUE);
+    init_message.x0 = 4;
+    init_message.y0 = ST7735Ctx.Height - 21;
+    init_message.area_width = ST7735Ctx.Width;
+    init_message.area_height = 1;
+    init_message.color = COLOR_WHITE;
+    init_message.bgcolor = COLOR_BLACK;
+    init_message.font = &Font_7x10;
+    LCD_printf(&init_message, "initialize...");
+	ST7735_LCD_Driver.FillRect(&st7735_pObj, 4,  4, 16, 8, COLOR_RED);
+	ST7735_LCD_Driver.FillRect(&st7735_pObj, 24, 4, 16, 8, COLOR_GREEN);
+	ST7735_LCD_Driver.FillRect(&st7735_pObj, 44, 4, 16, 8, COLOR_BLUE);
 	
 //	#ifdef TFT96
 //	extern unsigned char WeActStudiologo_160_80[];
@@ -101,10 +109,13 @@ void LCD_init(void)
 			LCD_SetBrightness((get_tick() - tick) * 500 / 1000);
 		else if (get_tick() - tick <= 3000)
 		{
-            LCD_printf(ST7735Ctx.Width - 30, 1, ST7735Ctx.Width, 16, 16, 
-                        "%03d", 1 + (get_tick() - tick - 1000) / 20);
+            init_message.x0 = ST7735Ctx.Width - 34;
+            init_message.y0 = 1;
+            init_message.font = &Font_11x18;
+            init_message.color = COLOR_TIANYIBLUE;
+            LCD_printf(&init_message, "%03d", 1 + (get_tick() - tick - 1000) / 20);
 			ST7735_LCD_Driver.FillRect(&st7735_pObj, 0, ST7735Ctx.Height - 4, 
-                                        (get_tick() - tick - 1000) * ST7735Ctx.Width / 2000, 4, TIANYI_BLUE);
+                                        (get_tick() - tick - 1000) * ST7735Ctx.Width / 2000, 4, COLOR_TIANYIBLUE);
 		}
 		else if (get_tick() - tick > 3000)
 			break;
@@ -115,11 +126,11 @@ void LCD_init(void)
 	}
 	LCD_Light(0, 300);
 
-	ST7735_LCD_Driver.FillRect(&st7735_pObj, 0, 0, ST7735Ctx.Width,ST7735Ctx.Height, BLACK);
+	ST7735_LCD_Driver.FillRect(&st7735_pObj, 0, 0, ST7735Ctx.Width,ST7735Ctx.Height, COLOR_BLACK);
     
-    LCD_printf(4, 4, ST7735Ctx.Width, 16, 16, "WeAct Studio");
-    LCD_printf(4, 22, ST7735Ctx.Width, 16, 16, "STM32H7xx 0x%X", HAL_GetDEVID());
-    LCD_printf(4, 40, ST7735Ctx.Width, 16, 16, "LCD ID:0x%X", st7735_id);
+//    LCD_printf(4, 4, ST7735Ctx.Width, 16, 16, "WeAct Studio");
+//    LCD_printf(4, 22, ST7735Ctx.Width, 16, 16, "STM32H7xx 0x%X", HAL_GetDEVID());
+//    LCD_printf(4, 40, ST7735Ctx.Width, 16, 16, "LCD ID:0x%X", st7735_id);
 
 	LCD_Light(500, 200);
 }
@@ -177,7 +188,8 @@ void LCD_Light(uint32_t Brightness_Dis,uint32_t time)
 		
 	}
 }
-	
+
+#if 0
 uint16_t POINT_COLOR=0xFFFF;	//画笔颜色
 uint16_t BACK_COLOR=BLACK;  //背景色 
 //在指定位置显示一个字符
@@ -185,7 +197,6 @@ uint16_t BACK_COLOR=BLACK;  //背景色
 //num:要显示的字符:" "--->"~"
 //size:字体大小 12/16
 //mode:叠加方式(1)还是非叠加方式(0)  
-
 void LCD_ShowChar(uint16_t x,uint16_t y,uint8_t num,uint8_t size,uint8_t mode)
 {  							  
   uint8_t temp,t1,t;
@@ -263,24 +274,51 @@ void LCD_ShowChar(uint16_t x,uint16_t y,uint8_t num,uint8_t size,uint8_t mode)
 	}
 	ST7735_FillRGBRect(&st7735_pObj,x0,y0,(uint8_t *)&write,size==12?6:8,size); 
 	POINT_COLOR=colortemp;	    	   	 	  
-}   
+}
+#endif  //LCD_ShowChar()
+
+uint16_t char_write_buf[350];  //16*26=344
+void LCD_WriteChar(uint16_t x, uint16_t y, char ch, FontDef* font, uint16_t color, uint16_t bgcolor) 
+{
+    uint16_t i, pixel, j;
+    uint16_t row = 0;
+
+    for(i = 0; i < font->height; i++) 
+    {
+        pixel = font->data[(ch - 32) * font->height + i];
+        for(j = 0; j < font->width; j++) 
+        {
+            if((pixel << j) & 0x8000)  {
+                char_write_buf[row + j] = (color&0xFF)<<8 | color>>8;
+            } else {
+                char_write_buf[row + j] = (bgcolor&0xFF)<<8 | bgcolor>>8;
+            }
+        }
+        row += font->width;
+    }
+    ST7735_FillRGBRect(&st7735_pObj, x, y, (uint8_t *)&char_write_buf, 
+                        font->width, font->height);
+}
 
 //显示字符串
-//x,y:起点坐标
-//width,height:区域大小  
-//size:字体大小
-//*p:字符串起始地址
-void LCD_ShowString(uint16_t x,uint16_t y,uint16_t width,uint16_t height,uint8_t size,uint8_t *p)
-{         
-	uint8_t x0=x;
-	width+=x;
-	height+=y;
+void LCD_ShowString(struct StringHandler* handler, uint8_t *p)
+{
+	uint8_t x = handler->x0;
+    uint8_t y = handler->y0;
+	uint16_t width = handler->x0 + handler->area_width;
+	uint16_t height = handler->y0 + handler->area_height;
+    
     while((*p<='~')&&(*p>=' '))//判断是不是非法字符!
     {       
-        if(x>=width){x=x0;y+=size;}
-        if(y>=height)break;//退出
-        LCD_ShowChar(x,y,*p,size,0);
-        x+=size/2;
+        if(x >= width)
+        {
+            x = handler->x0;
+            y += handler->font->height;
+        }
+        if (y >= height)
+            break;  //退出
+        LCD_WriteChar(x, y, *p, handler->font, handler->color, handler->bgcolor);
+        x += handler->font->width;
         p++;
     }  
 }

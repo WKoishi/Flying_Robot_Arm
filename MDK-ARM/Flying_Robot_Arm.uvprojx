@@ -313,7 +313,7 @@
           </ArmAdsMisc>
           <Cads>
             <interw>1</interw>
-            <Optim>1</Optim>
+            <Optim>6</Optim>
             <oTime>0</oTime>
             <SplitLS>0</SplitLS>
             <OneElfS>1</OneElfS>
@@ -339,7 +339,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32H743xx, TFT18</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;       ../USB_DEVICE/App;       ../USB_DEVICE/Target;       ../Drivers/STM32H7xx_HAL_Driver/Inc;       ../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy;       ../Middlewares/Third_Party/FreeRTOS/Source/include;       ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS;       ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F;       ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc;       ../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc;       ../Drivers/CMSIS/Device/ST/STM32H7xx/Include;       ../Drivers/CMSIS/Include;       ..\bsp\ST7735;       ..\application\algorithm;       ..\bsp;       ..\bsp\servo</IncludePath>
+              <IncludePath>../Core/Inc;../USB_DEVICE/App;../USB_DEVICE/Target;../Drivers/STM32H7xx_HAL_Driver/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy;../Middlewares/Third_Party/FreeRTOS/Source/include;../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS;../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F;../Middlewares/ST/STM32_USB_Device_Library/Core/Inc;../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc;../Drivers/CMSIS/Device/ST/STM32H7xx/Include;../Drivers/CMSIS/Include;..\bsp\ST7735;..\application\algorithm;..\bsp;..\application\servo</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -1132,14 +1132,19 @@
               <FilePath>..\bsp\my_time.c</FilePath>
             </File>
             <File>
-              <FileName>servo_uart.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\bsp\servo\servo_uart.c</FilePath>
-            </File>
-            <File>
               <FileName>my_uart.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\bsp\my_uart.c</FilePath>
+            </File>
+            <File>
+              <FileName>servo_uart.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\bsp\servo_uart.c</FilePath>
+            </File>
+            <File>
+              <FileName>fonts.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\bsp\ST7735\fonts.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1160,6 +1165,16 @@
               <FileName>pid.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\application\algorithm\pid.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>app/servo</GroupName>
+          <Files>
+            <File>
+              <FileName>servo_link.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\application\servo\servo_link.c</FilePath>
             </File>
           </Files>
         </Group>

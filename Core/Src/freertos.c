@@ -140,12 +140,12 @@ void StartDefaultTask(void const * argument)
   {
 	  HAL_GPIO_WritePin(LED_ON_BOARD_GPIO_Port, LED_ON_BOARD_Pin, GPIO_PIN_SET);
       get_time_period(&time_test);
-      usb_printf("now: %f  dt: %f  longteststringcnx23uibffrw3kolq874fhbuo3wlugb\r\n", time_test.Now_Time, time_test.Time_Delta);
+      //usb_printf("now: %f  dt: %f  longteststringcnx23uibffrw3kolq874fhbuo3wlugb\r\n", time_test.Now_Time, time_test.Time_Delta);
 	  osDelay(445);
       
 	  HAL_GPIO_WritePin(LED_ON_BOARD_GPIO_Port, LED_ON_BOARD_Pin, GPIO_PIN_RESET);
       get_time_period(&time_test);
-      usb_printf("now: %f  dt: %f  longteststringwweiucnq93o84fhpq9ufvb98u3bcnsd\r\n", time_test.Now_Time, time_test.Time_Delta);
+      //usb_printf("now: %f  dt: %f  longteststringwweiucnq93o84fhpq9ufvb98u3bcnsd\r\n", time_test.Now_Time, time_test.Time_Delta);
 	  osDelay(555);
   }
   /* USER CODE END StartDefaultTask */
