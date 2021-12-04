@@ -12,7 +12,7 @@ void lcd_show_task(void const * argument)
     struct Time_Object lcd_time = {0, 0, 0, 0};
     tick_message.x0 = 4;
     tick_message.y0 = 60;
-    tick_message.area_width = 50;
+    tick_message.area_width = 100;
     tick_message.area_height = 30;
     tick_message.font = &Font_7x10;
     tick_message.color = COLOR_TIANYIBLUE;
@@ -21,8 +21,12 @@ void lcd_show_task(void const * argument)
     for (;;)
     {
         get_time_period(&lcd_time);
+        tick_message.x0 = 4;
+        tick_message.y0 = 60;
         LCD_printf(&tick_message, "T: %d", (uint32_t)lcd_time.Now_Time);
-        //LCD_printf(4, 78, ST7735Ctx.Width, 16, 16, "DT: %d", (uint32_t)lcd_time.Time_Delta_INT);
+        tick_message.x0 = 4;
+        tick_message.y0 = 72;
+        LCD_printf(&tick_message, "DT: %d", (uint32_t)lcd_time.Time_Delta_INT);
         //usb_printf("%d", lcd_time.Time_Delta_INT);
        
         LCD_WriteChar(1, 1, 'M', &Font_11x18, COLOR_TIANYIBLUE, COLOR_BLACK);

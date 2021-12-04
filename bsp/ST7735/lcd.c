@@ -277,27 +277,37 @@ void LCD_ShowChar(uint16_t x,uint16_t y,uint8_t num,uint8_t size,uint8_t mode)
 }
 #endif  //LCD_ShowChar()
 
-uint16_t char_write_buf[350];  //16*26=344
+uint8_t char_write_buf[160];  //128*160
 void LCD_WriteChar(uint16_t x, uint16_t y, char ch, FontDef* font, uint16_t color, uint16_t bgcolor) 
 {
     uint16_t i, pixel, j;
-    uint16_t row = 0;
+    
+    if(((x + font->width) > ST7735Ctx.Width) ||
+            ((y + font->height) > ST7735Ctx.Height))
+    {
+        return;
+    }
 
     for(i = 0; i < font->height; i++) 
     {
-        pixel = font->data[(ch - 32) * font->height + i];
-        for(j = 0; j < font->width; j++) 
+        if (ST7735_SetCursor(&st7735_pObj, x, y+i) == ST7735_OK)
         {
-            if((pixel << j) & 0x8000)  {
-                char_write_buf[row + j] = (color&0xFF)<<8 | color>>8;
-            } else {
-                char_write_buf[row + j] = (bgcolor&0xFF)<<8 | bgcolor>>8;
+            pixel = font->data[(ch - 32) * font->height + i];
+            for(j = 0; j < font->width; j++) 
+            {
+                if((pixel << j) & 0x8000)  {
+                    char_write_buf[2*j] = (color>>8) & 0XFF;
+                    char_write_buf[(2*j) + 1] = color & 0XFF;
+                } else {
+                    char_write_buf[2*j] = (bgcolor>>8) & 0XFF;
+                    char_write_buf[(2*j) + 1] = bgcolor & 0XFF;
+                }
             }
+            st7735_send_data(&(st7735_pObj.Ctx), (uint8_t*)char_write_buf, 2U*font->width);
         }
-        row += font->width;
     }
-    ST7735_FillRGBRect(&st7735_pObj, x, y, (uint8_t *)&char_write_buf, 
-                        font->width, font->height);
+//    ST7735_FillRGBRect(&st7735_pObj, x, y, (uint8_t *)&char_write_buf, 
+//                        font->width, font->height);
 }
 
 //ÏÔÊ¾×Ö·û´®
