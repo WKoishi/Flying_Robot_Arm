@@ -17,6 +17,8 @@ void lcd_show_task(void const * argument)
     tick_message.font = &Font_7x10;
     tick_message.color = COLOR_TIANYIBLUE;
     //tick_message.bgcolor = COLOR_BLACK;
+    
+    get_time_period(&lcd_time);
 
     for (;;)
     {

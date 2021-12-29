@@ -52,6 +52,7 @@
 /* USER CODE END Variables */
 osThreadId defaultTaskHandle;
 osThreadId screen_taskHandle;
+osThreadId servo_taskHandle;
 
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN FunctionPrototypes */
@@ -60,6 +61,7 @@ osThreadId screen_taskHandle;
 
 void StartDefaultTask(void const * argument);
 extern void lcd_show_task(void const * argument);
+extern void servo_ctrl_task(void const * argument);
 
 extern void MX_USB_DEVICE_Init(void);
 void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
@@ -115,6 +117,10 @@ void MX_FREERTOS_Init(void) {
   osThreadDef(screen_task, lcd_show_task, osPriorityLow, 0, 512);
   screen_taskHandle = osThreadCreate(osThread(screen_task), NULL);
 
+  /* definition and creation of servo_task */
+  osThreadDef(servo_task, servo_ctrl_task, osPriorityNormal, 0, 256);
+  servo_taskHandle = osThreadCreate(osThread(servo_task), NULL);
+
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
   /* USER CODE END RTOS_THREADS */
@@ -141,12 +147,12 @@ void StartDefaultTask(void const * argument)
 	  HAL_GPIO_WritePin(LED_ON_BOARD_GPIO_Port, LED_ON_BOARD_Pin, GPIO_PIN_SET);
       get_time_period(&time_test);
       //usb_printf("now: %f  dt: %f  longteststringcnx23uibffrw3kolq874fhbuo3wlugb\r\n", time_test.Now_Time, time_test.Time_Delta);
-	  osDelay(445);
+	  osDelay(500);
       
 	  HAL_GPIO_WritePin(LED_ON_BOARD_GPIO_Port, LED_ON_BOARD_Pin, GPIO_PIN_RESET);
       get_time_period(&time_test);
       //usb_printf("now: %f  dt: %f  longteststringwweiucnq93o84fhpq9ufvb98u3bcnsd\r\n", time_test.Now_Time, time_test.Time_Delta);
-	  osDelay(555);
+	  osDelay(500);
   }
   /* USER CODE END StartDefaultTask */
 }
