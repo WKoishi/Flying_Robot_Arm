@@ -29,7 +29,7 @@ void ServoObject::command_read_data(ServoRegAddress address, uint8_t read_length
 bool ServoObject::ping_with_respond(void)
 {
     uint8_t i = 0;
-    uint8_t ret_val = false, wait_flag = false;
+    bool ret_val = false;
     
     receiver->inquiry_command = command_PING;
     receiver->inquiry_id = _id;
@@ -38,15 +38,15 @@ bool ServoObject::ping_with_respond(void)
     command_ping();
     for (i = 1; i <= receiver->num_retransmit; i++)
     {
-        wait_flag = servo_wait_respond(receiver, receiver->wait_time_ms);
-        if (true == wait_flag)
+        ret_val = servo_wait_respond(receiver, receiver->wait_time_ms);
+        if (true == ret_val)
         {
-            ret_val = true;
-            break;
+            return ret_val;
         }
         else
             command_ping();
     }
+    ret_val = servo_wait_respond(receiver, receiver->wait_time_ms);
     
     return ret_val;
 }

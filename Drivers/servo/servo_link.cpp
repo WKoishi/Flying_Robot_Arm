@@ -6,7 +6,7 @@
 uint8_t servo_send_buffer[SERVO_BUFFER_SIZE];
 
 struct ServoBusReceiver bus_1_receiver = {
-    .wait_time_ms = 500,
+    .wait_time_ms = 100,
     .num_retransmit = 2,
 };
 
@@ -91,22 +91,20 @@ void servo_single_receive_data(const uint8_t* data_buf, const uint16_t receive_l
     }
 }
 
-bool servo_wait_respond(struct ServoBusReceiver* receiver, uint16_t wait_ms)
+bool servo_wait_respond(struct ServoBusReceiver* receiver, const uint16_t wait_ms)
 {
     bool ret_val = false;
     uint32_t tick = 0;
     
-    wait_ms /= 2U;
     for (tick = 0; tick < wait_ms; tick++)
     {
+        osDelay(1);
         if (true == receiver_get_respond_flag(receiver))
         {
             ret_val = true;
             break;
         }
-        osDelay(1);
     }
-    
     return ret_val;
 }
 
