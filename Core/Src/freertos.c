@@ -118,7 +118,7 @@ void MX_FREERTOS_Init(void) {
   screen_taskHandle = osThreadCreate(osThread(screen_task), NULL);
 
   /* definition and creation of servo_task */
-  osThreadDef(servo_task, servo_ctrl_task, osPriorityNormal, 0, 256);
+  osThreadDef(servo_task, servo_ctrl_task, osPriorityAboveNormal, 0, 256);
   servo_taskHandle = osThreadCreate(osThread(servo_task), NULL);
 
   /* USER CODE BEGIN RTOS_THREADS */

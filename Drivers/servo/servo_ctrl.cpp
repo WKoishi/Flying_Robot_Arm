@@ -1,7 +1,7 @@
 #include "servo_ctrl.h"
 #include "usb_uart.h"
 
-extern "C" void servo_single_data_pack_send(uint8_t id, ServoCommand command, uint8_t* param_list, uint16_t param_len);
+void servo_single_data_pack_send(uint8_t id, ServoCommand command, uint8_t* param_list, uint16_t param_len);
 extern struct ServoBusReceiver bus_1_receiver;
 
 ServoObject::ServoObject(uint8_t id, float angle_limit_min, float angle_limit_max):

@@ -1030,12 +1030,12 @@
     <File>
       <GroupNumber>12</GroupNumber>
       <FileNumber>61</FileNumber>
-      <FileType>1</FileType>
+      <FileType>8</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\Drivers\servo\servo_link.c</PathWithFileName>
-      <FilenameWithoutPath>servo_link.c</FilenameWithoutPath>
+      <PathWithFileName>..\Drivers\servo\servo_link.cpp</PathWithFileName>
+      <FilenameWithoutPath>servo_link.cpp</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>

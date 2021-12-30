@@ -96,7 +96,6 @@ struct ServoBusReceiver {
     ServoRegAddress inquiry_address;
     ServoCommand inquiry_command;
     volatile uint8_t respond_flag;
-    struct Time_Object inquiry_time;
 };
 
 void servo_single_receive_data(const uint8_t* data_buf, const uint16_t receive_len);
