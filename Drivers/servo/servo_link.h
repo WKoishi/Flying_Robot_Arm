@@ -88,9 +88,11 @@ typedef enum {
     command_SYNCWRITE_DATA  = 0X83U,
 } ServoCommand;
 
+#define DEFAULT_NUM_RETRANSMIT (-1)
+
 struct ServoBusReceiver {
     const uint16_t wait_time_ms;
-    const uint8_t num_retransmit;
+    const int8_t default_num_retransmit;
     
     uint8_t inquiry_id;
     ServoRegAddress inquiry_address;

@@ -20,8 +20,8 @@ public:
     ServoObject(uint8_t id, float angle_limit_min, float angle_limit_max);
     void command_ping(void);
     void command_read_data(ServoRegAddress address, uint8_t read_length);
-    bool ping_with_respond(void);
-    bool read_data_with_respond(ServoRegAddress address, uint8_t read_length);
+    bool ping_with_respond(int8_t num_retransmit);
+    bool read_data_with_respond(ServoRegAddress address, uint8_t read_length, int8_t num_retransmit);
     
     //write private data from uart receiver
     void record_position(uint16_t position_)

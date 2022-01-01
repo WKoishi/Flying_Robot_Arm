@@ -7,7 +7,7 @@ uint8_t servo_send_buffer[SERVO_BUFFER_SIZE];
 
 struct ServoBusReceiver bus_1_receiver = {
     .wait_time_ms = 100,
-    .num_retransmit = 2,
+    .default_num_retransmit = 2,
 };
 
 static uint8_t receiver_get_id(struct ServoBusReceiver* receiver)
