@@ -1112,9 +1112,9 @@
           <GroupName>app/LCD</GroupName>
           <Files>
             <File>
-              <FileName>lcd_task.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\application\lcd_show\lcd_task.c</FilePath>
+              <FileName>lcd_task.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\application\lcd_show\lcd_task.cpp</FilePath>
             </File>
           </Files>
         </Group>
@@ -1122,19 +1122,19 @@
           <GroupName>app/algorithm</GroupName>
           <Files>
             <File>
-              <FileName>pid.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\application\algorithm\pid.c</FilePath>
+              <FileName>pid.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\application\algorithm\pid.cpp</FilePath>
             </File>
           </Files>
         </Group>
         <Group>
-          <GroupName>app/servo</GroupName>
+          <GroupName>app/robot</GroupName>
           <Files>
             <File>
-              <FileName>servo_task.cpp</FileName>
+              <FileName>robot_task.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\application\servo\servo_task.cpp</FilePath>
+              <FilePath>..\application\robot\robot_task.cpp</FilePath>
             </File>
           </Files>
         </Group>

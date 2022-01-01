@@ -1,13 +1,13 @@
 #ifndef _SERVO_LINK_H_
 #define _SERVO_LINK_H_
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include "stdint.h"
 #include "stdbool.h"
 #include "my_time.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 //#define servo_ID                    0X05
 //#define servo_BAUDRATE              0X06

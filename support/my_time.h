@@ -3,6 +3,10 @@
 
 #include "stdint.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 struct Time_Object {
 	volatile float Last_Time;
 	volatile float Now_Time;
@@ -12,6 +16,9 @@ struct Time_Object {
 
 void get_time_period(struct Time_Object *time_obj);
 
+#ifdef __cplusplus
+}
+#endif
 
 #endif // _TIME_H_
 

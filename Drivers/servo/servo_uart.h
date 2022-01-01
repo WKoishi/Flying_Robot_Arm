@@ -1,11 +1,11 @@
 #ifndef _SERVO_UART_H_
 #define _SERVO_UART_H_
 
+#include "stdint.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-#include "stdint.h"
 
 #define SERVO_BUFFER_SIZE 512
 

@@ -958,12 +958,12 @@
     <File>
       <GroupNumber>9</GroupNumber>
       <FileNumber>57</FileNumber>
-      <FileType>1</FileType>
+      <FileType>8</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\application\lcd_show\lcd_task.c</PathWithFileName>
-      <FilenameWithoutPath>lcd_task.c</FilenameWithoutPath>
+      <PathWithFileName>..\application\lcd_show\lcd_task.cpp</PathWithFileName>
+      <FilenameWithoutPath>lcd_task.cpp</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -978,19 +978,19 @@
     <File>
       <GroupNumber>10</GroupNumber>
       <FileNumber>58</FileNumber>
-      <FileType>1</FileType>
+      <FileType>8</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\application\algorithm\pid.c</PathWithFileName>
-      <FilenameWithoutPath>pid.c</FilenameWithoutPath>
+      <PathWithFileName>..\application\algorithm\pid.cpp</PathWithFileName>
+      <FilenameWithoutPath>pid.cpp</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
   </Group>
 
   <Group>
-    <GroupName>app/servo</GroupName>
+    <GroupName>app/robot</GroupName>
     <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
@@ -1002,8 +1002,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\application\servo\servo_task.cpp</PathWithFileName>
-      <FilenameWithoutPath>servo_task.cpp</FilenameWithoutPath>
+      <PathWithFileName>..\application\robot\robot_task.cpp</PathWithFileName>
+      <FilenameWithoutPath>robot_task.cpp</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>

@@ -6,7 +6,7 @@
 
 struct StringHandler tick_message;
 
-void lcd_show_task(void const * argument)
+extern "C" void lcd_show_task(void const * argument)
 {
     LCD_init();
     struct Time_Object lcd_time = {0, 0, 0, 0};

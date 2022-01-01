@@ -6,6 +6,10 @@
 #include "fonts.h"
 #include <stdio.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #define COLOR_WHITE         0xFFFF
 #define COLOR_BLACK         0x0000	  
 #define COLOR_BLUE          0x001F  
@@ -51,5 +55,9 @@ void LCD_ShowString(struct StringHandler* handler, uint8_t *p);
 void LCD_printf(struct StringHandler* handler, const char *format, ...);
 
 extern ST7735_Ctx_t ST7735Ctx;
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif  

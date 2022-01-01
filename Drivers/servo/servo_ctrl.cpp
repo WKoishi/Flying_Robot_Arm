@@ -64,14 +64,15 @@ bool ServoObject::read_data_with_respond(ServoRegAddress address, uint8_t read_l
     command_read_data(address, read_length);
     for (i = 1; i <= receiver->num_retransmit; i++)
     {
-        if (true == servo_wait_respond(receiver, receiver->wait_time_ms))
+        ret_val = servo_wait_respond(receiver, receiver->wait_time_ms);
+        if (true == ret_val)
         {
-            ret_val = true;
-            break;
+            return ret_val;
         }
         else
             command_read_data(address, read_length);
     }
+    ret_val = servo_wait_respond(receiver, receiver->wait_time_ms);
     
     return ret_val;
 }

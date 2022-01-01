@@ -3,6 +3,10 @@
 
 #include "stdint.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 struct PID_Object {
 	float output;
 	float error;
@@ -21,6 +25,9 @@ struct PID_Parameter {
 	float output_Max;
 };
 
+#ifdef __cplusplus
+}
+#endif
 
 #endif //_PID_H_
 
