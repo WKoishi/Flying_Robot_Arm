@@ -11,6 +11,7 @@ struct ServoBusManager bus_1_manager = {
     .receive_target = NULL,
 };
 
+bool servo_wait_respond(struct ServoBusManager* receiver, const uint16_t wait_ms);
 
 static inline uint8_t manager_get_id(struct ServoBusManager* receiver)
 {
@@ -32,42 +33,62 @@ static inline bool manager_get_respond_flag(struct ServoBusManager* receiver)
     return receiver->respond_flag;
 }
 
-static void manager_set_respond_flag(struct ServoBusManager* receiver)
+static inline void manager_set_respond_flag(struct ServoBusManager* receiver)
 {
     receiver->respond_flag = true;
 }
 
-void manager_reset_respond_flag(struct ServoBusManager* receiver)
+static inline void manager_reset_respond_flag(struct ServoBusManager* receiver)
 {
     receiver->respond_flag = false;
 }
 
-void servo_single_data_pack_send(uint8_t id, ServoCommand command, uint8_t* param_list, uint16_t param_len)
+bool servo_single_data_pack_send(struct ServoBusManager* manager, uint8_t id, 
+    const uint8_t* data, uint16_t data_len, bool wait_flag, int8_t num_retransmit)
 {
     uint16_t sum = 0, i = 0;
+    uint8_t ret_val = 0;
     
-    if (param_len > SERVO_BUFFER_SIZE - 10)
-        return;
+    if (data_len > SERVO_BUFFER_SIZE - 10)
+        return ret_val;
     
     servo_send_buffer[0] = 0XFF;
     servo_send_buffer[1] = 0XFF;
     servo_send_buffer[2] = id;
-    servo_send_buffer[3] = param_len + 2;
-    servo_send_buffer[4] = command;
+    servo_send_buffer[3] = data_len + 1;
     
-    //memcpy(servo_send_buffer + 5, param, param_len);  //Not necessary
-    
-    for (i = 0; i < param_len; i++)
+    for (i = 0; i < data_len; i++)
     {
-        servo_send_buffer[i + 5] = param_list[i];
-        sum += param_list[i];
+        servo_send_buffer[i + 4] = data[i];
+        sum += data[i];
     }
     sum += id;
-    sum += param_len + 2;
-    sum += command;
-    servo_send_buffer[param_len + 5] = ~(uint8_t)(sum & 0XFF);
+    sum += data_len + 1;
+    servo_send_buffer[data_len + 4] = ~(uint8_t)(sum & 0XFF);
     
-    servo_send_data_hardware(servo_send_buffer, param_len + 6);
+    manager_reset_respond_flag(manager);
+    
+    servo_send_data_hardware(servo_send_buffer, data_len + 5);
+    
+    if (wait_flag)
+    {
+        if (DEFAULT_NUM_RETRANSMIT == num_retransmit)
+            num_retransmit = manager->default_num_retransmit;
+        
+        for (i = 1; i <= num_retransmit; i++)
+        {
+            ret_val = servo_wait_respond(manager, manager->wait_time_ms);
+            if (true == ret_val)
+            {
+                return ret_val;
+            }
+            else
+                servo_send_data_hardware(servo_send_buffer, data_len + 5);
+        }
+        ret_val = servo_wait_respond(manager, manager->wait_time_ms);
+    }
+    
+    return ret_val;
 }
 
 extern "C" void servo_single_receive_data_ISR(const uint8_t* data_buf, const uint16_t receive_len)

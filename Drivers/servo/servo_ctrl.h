@@ -26,10 +26,9 @@ public:
     
     ServoObject(const uint8_t id_);
     void export_init(const uint8_t id_);
-    void command_ping(void);
-    void command_read_data(ServoRegAddress address, uint8_t read_length);
-    bool ping_with_respond(int8_t num_retransmit);
-    bool read_data_with_respond(ServoRegAddress address, uint8_t read_length, int8_t num_retransmit);
+    void write_data(ServoRegAddress address, const uint8_t* data, uint8_t length, bool wait_flag, int8_t num_retransmit);
+    bool ping_with_respond(bool wait_flag, int8_t num_retransmit);
+    bool read_data_with_respond(ServoRegAddress address, uint8_t read_length, bool wait_flag, int8_t num_retransmit);
     
     bool export_read_state(void);
     

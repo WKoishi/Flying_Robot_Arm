@@ -74,10 +74,6 @@ struct ServoBusManager {
     class ServoObject* receive_target;  // The destination of the received data store
 };
 
-void servo_single_receive_data(const uint8_t* data_buf, const uint16_t receive_len);
-bool servo_wait_respond(struct ServoBusManager* receiver, const uint16_t wait_ms);
-void manager_reset_respond_flag(struct ServoBusManager* receiver);
-
 #ifdef __cplusplus
 extern "C" {
 #endif
