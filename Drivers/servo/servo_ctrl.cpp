@@ -2,12 +2,12 @@
 #include "usb_uart.h"
 
 void servo_single_data_pack_send(uint8_t id, ServoCommand command, uint8_t* param_list, uint16_t param_len);
-extern struct ServoBusReceiver bus_1_receiver;
+extern struct ServoBusManager bus_1_manager;
 
-ServoObject::ServoObject(uint8_t id, float angle_limit_min, float angle_limit_max):
-    _id(id), _angle_limit_min(angle_limit_min), _angle_limit_max(angle_limit_max)
+ServoObject::ServoObject(uint8_t id_)
 {
-    this->receiver = &bus_1_receiver;
+    this->bus_manager = &bus_1_manager;
+    this->_id = id_;
 };
 
 
@@ -32,16 +32,16 @@ bool ServoObject::ping_with_respond(int8_t num_retransmit)
     bool ret_val = false;
     
     if (DEFAULT_NUM_RETRANSMIT == num_retransmit)
-        num_retransmit = receiver->default_num_retransmit;
+        num_retransmit = bus_manager->default_num_retransmit;
     
-    receiver->inquiry_command = command_PING;
-    receiver->inquiry_id = _id;
-    receiver_reset_respond_flag(receiver);
+    bus_manager->inquiry_command = command_PING;
+    bus_manager->inquiry_id = _id;
+    manager_reset_respond_flag(bus_manager);
     
     command_ping();
     for (i = 1; i <= num_retransmit; i++)
     {
-        ret_val = servo_wait_respond(receiver, receiver->wait_time_ms);
+        ret_val = servo_wait_respond(bus_manager, bus_manager->wait_time_ms);
         if (true == ret_val)
         {
             return ret_val;
@@ -49,7 +49,7 @@ bool ServoObject::ping_with_respond(int8_t num_retransmit)
         else
             command_ping();
     }
-    ret_val = servo_wait_respond(receiver, receiver->wait_time_ms);
+    ret_val = servo_wait_respond(bus_manager, bus_manager->wait_time_ms);
     
     return ret_val;
 }
@@ -61,17 +61,18 @@ bool ServoObject::read_data_with_respond(ServoRegAddress address, uint8_t read_l
     uint8_t ret_val = false;
     
     if (DEFAULT_NUM_RETRANSMIT == num_retransmit)
-        num_retransmit = receiver->default_num_retransmit;
+        num_retransmit = bus_manager->default_num_retransmit;
     
-    receiver->inquiry_command = command_READ_DATA;
-    receiver->inquiry_id = _id;
-    receiver->inquiry_address = address;
-    receiver_reset_respond_flag(receiver);
+    bus_manager->inquiry_command = command_READ_DATA;
+    bus_manager->inquiry_id = _id;
+    bus_manager->inquiry_address = address;
+    bus_manager->receive_target = this;    // Let the manager store data to this class in the receive ISR
+    manager_reset_respond_flag(bus_manager);
     
     command_read_data(address, read_length);
     for (i = 1; i <= num_retransmit; i++)
     {
-        ret_val = servo_wait_respond(receiver, receiver->wait_time_ms);
+        ret_val = servo_wait_respond(bus_manager, bus_manager->wait_time_ms);
         if (true == ret_val)
         {
             return ret_val;
@@ -79,9 +80,16 @@ bool ServoObject::read_data_with_respond(ServoRegAddress address, uint8_t read_l
         else
             command_read_data(address, read_length);
     }
-    ret_val = servo_wait_respond(receiver, receiver->wait_time_ms);
+    ret_val = servo_wait_respond(bus_manager, bus_manager->wait_time_ms);
     
     return ret_val;
 }
+
+bool ServoObject::export_read_state(void)
+{
+    bus_manager->special_command = special_READ_STATE;
+    return read_data_with_respond(servo_POSITION_NOW, 15, 1);
+}
+
 
 

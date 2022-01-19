@@ -10,7 +10,7 @@ extern "C" {
 #define SERVO_BUFFER_SIZE 512
 
 void servo_receive_init(void);
-void servo_send_data_dma(uint8_t* data, uint16_t length);
+void servo_send_data_hardware(uint8_t* data, uint16_t length);
     
 #ifdef __cplusplus
 }

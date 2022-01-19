@@ -5,42 +5,6 @@
 #include "stdbool.h"
 #include "my_time.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-//#define servo_ID                    0X05
-//#define servo_BAUDRATE              0X06
-//#define servo_RESPONSE_DELAY        0X07
-//#define servo_RESPONSE_STATE        0X08
-//#define servo_ANGLE_LIMIT_MIN       0X09
-//#define servo_ANGLE_LIMIT_MAX       0X0B
-//#define servo_TEMPERATURE_MAX       0X0D
-//#define servo_TORQUE_MAX            0X10
-//#define servo_TRIGGER_UNLOAD        0X13
-//#define servo_TRIGGER_LED_ALARM     0X14
-//#define servo_CURRENT_PROTECT       0X1C
-//#define servo_ANGLE_RESOLUTION      0X1E
-//#define servo_POSITION_CORRECT      0X1F
-//#define servo_MODE                  0X21
-//#define servo_TORQUE_PROTECT        0X22
-//#define servo_TIME_TORQUE_PROTECT   0X23
-//#define servo_TORQUE_OVERLOAD       0X24
-//#define servo_TIME_OVERCURRENT      0X26
-//#define servo_TORQUE_SWITCH         0X28
-//#define servo_ACCELERATION          0X29
-//#define servo_POSITION_TARGET       0X2A
-//#define servo_TIME_RUNTIME          0X2C
-//#define servo_SPEED_TARGET          0X2E
-//#define servo_TORQUE_LIMIT          0X30
-//#define servo_POSITION_NOW          0X38
-//#define servo_SPEED_NOW             0X3A
-//#define servo_LOAD_NOW              0X3C
-//#define servo_VOLTAGE_NOW           0X3E
-//#define servo_TEMPERATURE_NOW       0X3F
-//#define servo_STATE                 0X41
-//#define servo_CURRENT_NOW           0X45
-
 typedef enum {
     servo_ID                    = 0X05U,
     servo_BAUDRATE              = 0X06U,
@@ -88,25 +52,71 @@ typedef enum {
     command_SYNCWRITE_DATA  = 0X83U,
 } ServoCommand;
 
+typedef enum {
+    special_NONE = 0,
+    special_READ_STATE,
+} ServoSpecialCommand;
+
 #define DEFAULT_NUM_RETRANSMIT (-1)
 
-struct ServoBusReceiver {
+#include "servo_ctrl.h"
+
+struct ServoBusManager {
     const uint16_t wait_time_ms;
     const int8_t default_num_retransmit;
     
     uint8_t inquiry_id;
     ServoRegAddress inquiry_address;
     ServoCommand inquiry_command;
+    ServoSpecialCommand special_command;
     volatile uint8_t respond_flag;
+    
+    class ServoObject* receive_target;  // The destination of the received data store
 };
 
 void servo_single_receive_data(const uint8_t* data_buf, const uint16_t receive_len);
-bool servo_wait_respond(struct ServoBusReceiver* receiver, const uint16_t wait_ms);
-void receiver_reset_respond_flag(struct ServoBusReceiver* receiver);
-    
+bool servo_wait_respond(struct ServoBusManager* receiver, const uint16_t wait_ms);
+void manager_reset_respond_flag(struct ServoBusManager* receiver);
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifdef __cplusplus
 }
 #endif
+
+//#define servo_ID                    0X05
+//#define servo_BAUDRATE              0X06
+//#define servo_RESPONSE_DELAY        0X07
+//#define servo_RESPONSE_STATE        0X08
+//#define servo_ANGLE_LIMIT_MIN       0X09
+//#define servo_ANGLE_LIMIT_MAX       0X0B
+//#define servo_TEMPERATURE_MAX       0X0D
+//#define servo_TORQUE_MAX            0X10
+//#define servo_TRIGGER_UNLOAD        0X13
+//#define servo_TRIGGER_LED_ALARM     0X14
+//#define servo_CURRENT_PROTECT       0X1C
+//#define servo_ANGLE_RESOLUTION      0X1E
+//#define servo_POSITION_CORRECT      0X1F
+//#define servo_MODE                  0X21
+//#define servo_TORQUE_PROTECT        0X22
+//#define servo_TIME_TORQUE_PROTECT   0X23
+//#define servo_TORQUE_OVERLOAD       0X24
+//#define servo_TIME_OVERCURRENT      0X26
+//#define servo_TORQUE_SWITCH         0X28
+//#define servo_ACCELERATION          0X29
+//#define servo_POSITION_TARGET       0X2A
+//#define servo_TIME_RUNTIME          0X2C
+//#define servo_SPEED_TARGET          0X2E
+//#define servo_TORQUE_LIMIT          0X30
+//#define servo_POSITION_NOW          0X38
+//#define servo_SPEED_NOW             0X3A
+//#define servo_LOAD_NOW              0X3C
+//#define servo_VOLTAGE_NOW           0X3E
+//#define servo_TEMPERATURE_NOW       0X3F
+//#define servo_STATE                 0X41
+//#define servo_CURRENT_NOW           0X45
 
 #endif // _SERVO_LINK_H_
 

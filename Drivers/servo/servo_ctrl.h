@@ -7,42 +7,55 @@
 
 class ServoObject {
 public:
-    const uint8_t _id;
-    const float _angle_limit_min;
-    const float _angle_limit_max;
     
     float position_target;
     float velocity_target;
     float accelerate;
-    
-    struct ServoBusReceiver* receiver;
 
-    ServoObject(uint8_t id, float angle_limit_min, float angle_limit_max);
+    float load_ratio;
+    float voltage;
+    float current;
+    uint16_t position;
+    int16_t velocity;
+    uint8_t temperature;
+    uint8_t async_flag;
+    uint8_t servo_state;
+    uint8_t move_flag;
+    
+    struct ServoBusManager* bus_manager;
+    
+    ServoObject(const uint8_t id_);
+    void export_init(const uint8_t id_);
     void command_ping(void);
     void command_read_data(ServoRegAddress address, uint8_t read_length);
     bool ping_with_respond(int8_t num_retransmit);
     bool read_data_with_respond(ServoRegAddress address, uint8_t read_length, int8_t num_retransmit);
     
-    //write private data from uart receiver
+    bool export_read_state(void);
+    
+    void export_get_angle(void);
+    
+    //write state data from uart receiver
     void record_position(uint16_t position_)
     {
         this->position = position_;
     }
-    void record_velocity(uint16_t velocity_)
+    void record_velocity(int16_t velocity_)
     {
-        this->velocity = velocity_;
+        if (velocity_ >= 0) this->velocity = velocity_;
+        else this->velocity = 0X8000 - (uint16_t)velocity_;
     }
-    void record_load_ratio(float load_ratio_)
+    void record_load_ratio(uint16_t load_ratio_)
     {
-        this->load_ratio = load_ratio_;
+        this->load_ratio = (float)load_ratio_ * 0.001f;
     }
-    void record_voltage(float voltage_)
+    void record_voltage(uint8_t voltage_)
     {
-        this->voltage = voltage_;
+        this->voltage = (float)voltage_ * 0.1f;
     }
-    void record_current(float current_)
+    void record_current(uint16_t current_)
     {
-        this->current = current_;
+        this->current = (float)current_ * 0.0065f;
     }
     void record_temperature(uint8_t temperature_)
     {
@@ -61,12 +74,12 @@ public:
         this->move_flag = move_flag_;
     }
     
-    //read private data
+    //read state data
     uint16_t get_position(void)
     {
         return position;
     }
-    uint16_t get_velocity(void)
+    int16_t get_velocity(void)
     {
         return velocity;
     }
@@ -101,15 +114,10 @@ public:
     
     
 private:
-    uint16_t position;
-    uint16_t velocity;
-    float load_ratio;
-    float voltage;
-    float current;
-    uint8_t temperature;
-    uint8_t async_flag;
-    uint8_t servo_state;
-    uint8_t move_flag;           
+    float _angle_limit_min;
+    float _angle_limit_max; 
+    uint8_t _id;
+
 };
 
 #ifdef __cplusplus

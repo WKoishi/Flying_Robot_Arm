@@ -1,5 +1,4 @@
 #include "servo_uart.h"
-#include "servo_link.h"
 #include "usart.h"
 #include "usbd_cdc_if.h"
 
@@ -11,6 +10,8 @@
 #endif
 
 uint8_t servo_rx_buffer[SERVO_BUFFER_SIZE] __attribute__((section(".ARM.__at_0x24000000")));
+
+void servo_single_receive_data_ISR(const uint8_t* data_buf, const uint16_t receive_len);
 
 void servo_receive_init(void)
 {
@@ -34,7 +35,7 @@ void USART2_IRQHandler(void)
         temp = __HAL_DMA_GET_COUNTER(huart2.hdmarx);
         receive_len = SERVO_BUFFER_SIZE - temp;
         
-        servo_single_receive_data(servo_rx_buffer, receive_len);
+        servo_single_receive_data_ISR(servo_rx_buffer, receive_len);
         
         /*******************************************/
         //CDC_Transmit_FS(servo_rx_buffer, receive_len);  //test
@@ -48,7 +49,7 @@ void USART2_IRQHandler(void)
     #endif
 }
 
-void servo_send_data_dma(uint8_t* data, uint16_t length)
+void servo_send_data_hardware(uint8_t* data, uint16_t length)
 {
     HAL_UART_Transmit_DMA(&huart2, data, length);
 }
