@@ -21,7 +21,7 @@ extern "C" void servo_ctrl_task(void const * argument)
         osDelay(50);
         
         get_time_period(&servo_time);
-        ret_val = servo_1.export_read_state();
+        ret_val = servo_1.ping_with_respond(true, 0);
         get_time_period(&servo_time);
         if (ret_val)
             usb_printf("Y1 %d,%d,%f,%f,%d,%f,%f\r\n", servo_1.position, servo_1.velocity, 
@@ -32,7 +32,7 @@ extern "C" void servo_ctrl_task(void const * argument)
 
         
         get_time_period(&servo_time);
-        ret_val = servo_2.export_read_state();
+        ret_val = servo_2.ping_with_respond(true, 0);
         get_time_period(&servo_time);
         if (ret_val)
             usb_printf("Y2 %d,%d,%f,%f,%d,%f,%f\r\n", servo_2.position, servo_2.velocity, 

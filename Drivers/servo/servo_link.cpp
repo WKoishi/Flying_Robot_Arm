@@ -75,17 +75,14 @@ bool servo_single_data_pack_send(struct ServoBusManager* manager, uint8_t id,
         if (DEFAULT_NUM_RETRANSMIT == num_retransmit)
             num_retransmit = manager->default_num_retransmit;
         
+        ret_val = servo_wait_respond(manager, manager->wait_time_ms);
         for (i = 1; i <= num_retransmit; i++)
         {
-            ret_val = servo_wait_respond(manager, manager->wait_time_ms);
             if (true == ret_val)
-            {
-                return ret_val;
-            }
-            else
-                servo_send_data_hardware(servo_send_buffer, data_len + 5);
+                break;
+            servo_send_data_hardware(servo_send_buffer, data_len + 5);
+            ret_val = servo_wait_respond(manager, manager->wait_time_ms);
         }
-        ret_val = servo_wait_respond(manager, manager->wait_time_ms);
     }
     
     return ret_val;

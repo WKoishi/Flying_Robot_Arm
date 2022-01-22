@@ -1,5 +1,6 @@
 #include "servo_ctrl.h"
 #include "usb_uart.h"
+#include "string.h"
 
 bool servo_single_data_pack_send(struct ServoBusManager* manager, uint8_t id, 
     const uint8_t* data, uint16_t data_len, bool wait_flag, int8_t num_retransmit);
@@ -11,12 +12,6 @@ ServoObject::ServoObject(uint8_t id_)
     this->_id = id_;
 };
 
-
-void ServoObject::write_data(ServoRegAddress address, const uint8_t* data, uint8_t length, 
-    bool wait_flag, int8_t num_retransmit)
-{
-    
-}
 
 bool ServoObject::ping_with_respond(bool wait_flag, int8_t num_retransmit)
 {
@@ -49,6 +44,23 @@ bool ServoObject::read_data_with_respond(ServoRegAddress address, uint8_t read_l
     data[1] = address;
     data[2] = read_length;
     ret_val = servo_single_data_pack_send(bus_manager, _id, data, 3, wait_flag, num_retransmit);
+    
+    return ret_val;
+}
+
+bool ServoObject::write_data(ServoRegAddress address, const uint8_t* data, uint8_t length, 
+    bool wait_flag, int8_t num_retransmit)
+{
+    static uint8_t send_data_buf[0X100] = {0};
+    uint8_t ret_val = false;
+    
+    bus_manager->inquiry_command = command_WRITE_DATA;
+    bus_manager->inquiry_id = _id;
+    
+    send_data_buf[0] = command_WRITE_DATA;
+    memcpy(send_data_buf + 1, data, length*sizeof(uint8_t));
+    
+    ret_val = servo_single_data_pack_send(bus_manager, _id, send_data_buf, length+1, wait_flag, num_retransmit);
     
     return ret_val;
 }
