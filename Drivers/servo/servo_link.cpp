@@ -66,8 +66,6 @@ bool servo_single_data_pack_send(struct ServoBusManager* manager, uint8_t id,
     sum += data_len + 1;
     servo_send_buffer[data_len + 4] = ~(uint8_t)(sum & 0XFF);
     
-    manager_reset_respond_flag(manager);
-    
     servo_send_data_hardware(servo_send_buffer, data_len + 5);
     
     if (wait_flag)
@@ -149,6 +147,7 @@ bool servo_wait_respond(struct ServoBusManager* receiver, const uint16_t wait_ms
         osDelay(1);
         if (true == manager_get_respond_flag(receiver))
         {
+            manager_reset_respond_flag(receiver);
             ret_val = true;
             break;
         }
