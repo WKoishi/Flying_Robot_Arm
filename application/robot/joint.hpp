@@ -11,7 +11,7 @@ private:
 
 public:
     
-    Joint(const uint8_t id_): driver(id_)
+    explicit Joint(const uint8_t id_): driver(id_)
     { }
     
     float now_angle(void)

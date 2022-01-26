@@ -134,6 +134,11 @@ extern "C" void servo_single_receive_data_ISR(const uint8_t* data_buf, const uin
                 bus_1_manager.special_command = special_NONE;
             }
         }
+        else if (command_WRITE_DATA == command)
+        {
+            if (manager_get_id(&bus_1_manager) == data_buf[2] && 6 == receive_len)
+                manager_set_respond_flag(&bus_1_manager);
+        }
     }
 }
 

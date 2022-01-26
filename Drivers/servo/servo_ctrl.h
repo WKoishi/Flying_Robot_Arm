@@ -5,8 +5,12 @@
 #include "stdbool.h"
 #include "servo_link.h"
 
+#define PI_f 3.14159265f
+
 class ServoObject {
 public:
+    
+    const uint16_t POSITION_RESOLUTION = 4096;
     
     float position_target;
     float velocity_target;
@@ -24,15 +28,18 @@ public:
     
     struct ServoBusManager* bus_manager;
     
-    ServoObject(const uint8_t id_);
+    explicit ServoObject(const uint8_t id_);
     void export_init(const uint8_t id_);
     bool write_data(ServoRegAddress address, const uint8_t* data, uint8_t length, bool wait_flag, int8_t num_retransmit);
     bool ping_with_respond(bool wait_flag, int8_t num_retransmit);
     bool read_data_with_respond(ServoRegAddress address, uint8_t read_length, bool wait_flag, int8_t num_retransmit);
+    bool set_position(uint16_t position_);
+    bool set_accelerate(uint8_t accelerate_);
     
     bool export_read_state(void);
-    
     void export_get_angle(void);
+    bool export_torque_switch(bool switch_flag);
+    bool export_set_middle_position(void);
     
     //write state data from uart receiver
     void record_position(uint16_t position_)
@@ -116,6 +123,7 @@ private:
     float _angle_limit_min;
     float _angle_limit_max; 
     uint8_t _id;
+    uint8_t send_data_buffer[0X100];
 
 };
 

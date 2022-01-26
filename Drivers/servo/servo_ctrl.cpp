@@ -51,16 +51,16 @@ bool ServoObject::read_data_with_respond(ServoRegAddress address, uint8_t read_l
 bool ServoObject::write_data(ServoRegAddress address, const uint8_t* data, uint8_t length, 
     bool wait_flag, int8_t num_retransmit)
 {
-    static uint8_t send_data_buf[0X100] = {0};
     uint8_t ret_val = false;
     
     bus_manager->inquiry_command = command_WRITE_DATA;
     bus_manager->inquiry_id = _id;
     
-    send_data_buf[0] = command_WRITE_DATA;
-    memcpy(send_data_buf + 1, data, length*sizeof(uint8_t));
+    send_data_buffer[0] = command_WRITE_DATA;
+    send_data_buffer[1] = address;
+    memcpy(send_data_buffer + 2, data, length*sizeof(uint8_t));
     
-    ret_val = servo_single_data_pack_send(bus_manager, _id, send_data_buf, length+1, wait_flag, num_retransmit);
+    ret_val = servo_single_data_pack_send(bus_manager, _id, send_data_buffer, length+2, wait_flag, num_retransmit);
     
     return ret_val;
 }
@@ -70,6 +70,49 @@ bool ServoObject::export_read_state(void)
     bus_manager->special_command = special_READ_STATE;
     return read_data_with_respond(servo_POSITION_NOW, 15, true, 1);
 }
+
+bool ServoObject::export_torque_switch(bool switch_flag)
+{
+    uint8_t send_data[2] = {0};
+    
+    send_data[0] = (uint8_t)switch_flag;
+    return write_data(servo_TORQUE_SWITCH, send_data, 1, true, DEFAULT_NUM_RETRANSMIT);
+}
+
+bool ServoObject::export_set_middle_position(void)
+{
+    uint8_t send_data[2] = {0};
+    
+    send_data[0] = 128U;
+    return write_data(servo_TORQUE_SWITCH, send_data, 1, true, DEFAULT_NUM_RETRANSMIT);
+}
+
+bool ServoObject::set_position(uint16_t position_)
+{
+    uint8_t send_data[4] = {0};
+    
+    if (position_ > POSITION_RESOLUTION)
+        position_ = POSITION_RESOLUTION;
+    
+    send_data[0] = position_ & 0XFF;
+    send_data[1] = (position_ >> 8) & 0XFF;
+    
+    return write_data(servo_POSITION_TARGET, send_data, 2, true, 1);
+}
+
+bool ServoObject::set_accelerate(uint8_t accelerate_)
+{
+    uint8_t send_data[2] = {0};
+    
+    if (accelerate_ > 254)
+        accelerate_ = 254;
+    
+    send_data[0] = accelerate_;
+    
+    return write_data(servo_ACCELERATION, send_data, 1, true, DEFAULT_NUM_RETRANSMIT);
+}
+
+
 
 
 
