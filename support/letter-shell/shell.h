@@ -445,7 +445,7 @@ void shellScan(Shell *shell, char *fmt, ...);
 Shell* shellGetCurrent(void);
 void shellHandler(Shell *shell, char data);
 void shellWriteEndLine(Shell *shell, char *buffer, int len);
-void shellTask(void *param);
+void shellTask(const void *param);
 int shellRun(Shell *shell, const char *cmd);
 
 

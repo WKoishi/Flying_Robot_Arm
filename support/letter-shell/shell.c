@@ -1819,7 +1819,7 @@ void shellWriteEndLine(Shell *shell, char *buffer, int len)
  * @param param 参数(shell对象)
  * 
  */
-void shellTask(void *param)
+void shellTask(const void *param)
 {
     Shell *shell = (Shell *)param;
     char data;
