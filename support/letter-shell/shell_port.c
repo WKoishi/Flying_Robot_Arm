@@ -18,6 +18,7 @@
 //#include "cevent.h"
 //#include "log.h"
 
+#define shell_huart huart1
 
 Shell shell;
 char shellBuffer[512];
@@ -25,6 +26,26 @@ char shellBuffer[512];
 osThreadId shell_task_handler;
 
 static SemaphoreHandle_t shellMutex;
+
+typedef struct {
+    char data_temp;
+    uint8_t flag;
+} ShellReceiver;
+static ShellReceiver receiver;
+
+/**
+ * @brief USART1 interrupt function
+ */
+void USART1_IRQHandler(void)
+{
+    if ((__HAL_UART_GET_FLAG(&shell_huart, UART_FLAG_RXNE) != RESET))
+    {
+        receiver.data_temp = shell_huart.Instance->RDR;
+        receiver.flag = 1;
+        osSignalSet(shell_task_handler, 1);
+    }
+    HAL_UART_IRQHandler(&shell_huart);
+}
 
 /**
  * @brief 用户shell写
@@ -37,7 +58,7 @@ static SemaphoreHandle_t shellMutex;
 short userShellWrite(char *data, unsigned short len)
 {
     //serialTransmit(&debugSerial, (uint8_t *)data, len, 0x1FF);
-    HAL_UART_Transmit(&huart1, (uint8_t*)data, len, 0X1FF);
+    HAL_UART_Transmit(&shell_huart, (uint8_t*)data, len, 0X1FF);
     
     return len;
 }
@@ -53,14 +74,19 @@ short userShellWrite(char *data, unsigned short len)
  */
 short userShellRead(char *data, unsigned short len)
 {
-    if(HAL_UART_Receive(&huart1, (uint8_t *)data, len, 0xFFFF) != HAL_OK)
+    short ret_val = 0;
+    
+    if (0 == receiver.flag)
+        osSignalWait(1, portMAX_DELAY);
+    
+    if (receiver.flag)
     {
-        return 0;
+        *data = receiver.data_temp;
+        receiver.flag = 0;
+        ret_val = 1;
     }
-    else
-    {
-        return 1;
-    }
+    
+    return ret_val;
     //return serialReceive(&debugSerial, (uint8_t *)data, len, 0);
 }
 
@@ -104,7 +130,9 @@ void userShellInit(void)
     shell.unlock = userShellUnlock;
     shellInit(&shell, shellBuffer, 512);
     
-    osThreadDef(shell_task, shellTask, osPriorityIdle, 0, 256);
+    __HAL_UART_ENABLE_IT(&shell_huart, UART_IT_RXNE);
+    
+    osThreadDef(shell_task, shellTask, osPriorityHigh, 0, 256);
     shell_task_handler = osThreadCreate(osThread(shell_task), &shell);
     
 //    if (xTaskCreate(shellTask, "shell", 256, &shell, 5, NULL) != pdPASS)
