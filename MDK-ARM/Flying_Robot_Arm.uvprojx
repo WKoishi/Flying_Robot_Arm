@@ -339,7 +339,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32H743xx,TFT18,ARM_MATH_CM7,ARM_MATH_MATRIX_CHECK,ARM_MATH_ROUNDING</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;../USB_DEVICE/App;../USB_DEVICE/Target;../Drivers/STM32H7xx_HAL_Driver/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy;../Middlewares/Third_Party/FreeRTOS/Source/include;../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS;../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F;../Middlewares/ST/STM32_USB_Device_Library/Core/Inc;../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc;../Drivers/CMSIS/Device/ST/STM32H7xx/Include;../Drivers/CMSIS/Include;..\application\algorithm;..\Drivers\servo;..\Drivers\ST7735;..\support;..\application\robot\kinematic</IncludePath>
+              <IncludePath>../Core/Inc;     ../USB_DEVICE/App;     ../USB_DEVICE/Target;     ../Drivers/STM32H7xx_HAL_Driver/Inc;     ../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy;     ../Middlewares/Third_Party/FreeRTOS/Source/include;     ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS;     ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F;     ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc;     ../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc;     ../Drivers/CMSIS/Device/ST/STM32H7xx/Include;     ../Drivers/CMSIS/Include;     ..\application\algorithm;     ..\Drivers\servo;     ..\Drivers\ST7735;     ..\support;     ..\support\letter-shell</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -1141,6 +1141,11 @@
               <FileType>8</FileType>
               <FilePath>..\application\robot\kinematic\6dof_kinematic.cpp</FilePath>
             </File>
+            <File>
+              <FileName>robot.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\application\robot\robot.cpp</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -1200,6 +1205,31 @@
               <FileName>my_uart.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\support\my_uart.c</FilePath>
+            </File>
+            <File>
+              <FileName>shell.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\support\letter-shell\shell.c</FilePath>
+            </File>
+            <File>
+              <FileName>shell_cmd_list.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\support\letter-shell\shell_cmd_list.c</FilePath>
+            </File>
+            <File>
+              <FileName>shell_companion.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\support\letter-shell\shell_companion.c</FilePath>
+            </File>
+            <File>
+              <FileName>shell_ext.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\support\letter-shell\shell_ext.c</FilePath>
+            </File>
+            <File>
+              <FileName>shell_port.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\support\letter-shell\shell_port.c</FilePath>
             </File>
           </Files>
         </Group>

@@ -56,6 +56,7 @@ osThreadId servo_taskHandle;
 
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN FunctionPrototypes */
+extern void userShellInit(void);
 
 /* USER CODE END FunctionPrototypes */
 
@@ -140,6 +141,8 @@ void StartDefaultTask(void const * argument)
   MX_USB_DEVICE_Init();
   /* USER CODE BEGIN StartDefaultTask */
     struct Time_Object time_test;
+    
+    userShellInit();
     
   /* Infinite loop */
   for(;;)

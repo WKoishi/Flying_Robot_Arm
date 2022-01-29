@@ -2,13 +2,13 @@
 #include "stdint.h"
 #include "servo_ctrl.h"
 #include "usb_uart.h"
-#include "joint.hpp"
+#include "robot.h"
 #include "arm_math.h"
 
 ServoObject servo_1(0X01);
 ServoObject servo_2(0X02);
 
-Joint<ServoObject> test(0X05);
+RobotArm robot;
 
 struct Time_Object servo_time;
 
@@ -75,7 +75,7 @@ extern "C" void servo_ctrl_task(void const * argument)
         }
         get_time_period(&servo_time);
         sinin = 1.87324;
-        usb_printf("%f", servo_time.Time_Delta);
+        //usb_printf("%f", servo_time.Time_Delta);
             
     }
 }
