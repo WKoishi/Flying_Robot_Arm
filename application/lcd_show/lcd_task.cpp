@@ -12,8 +12,8 @@ extern "C" void lcd_show_task(void const * argument)
     struct Time_Object lcd_time = {0, 0, 0, 0};
     tick_message.x0 = 4;
     tick_message.y0 = 60;
-    tick_message.area_width = 100;
-    tick_message.area_height = 30;
+    tick_message.area_width = 124;
+    tick_message.area_height = 40;
     tick_message.font = &Font_7x10;
     tick_message.color = COLOR_TIANYIBLUE;
     //tick_message.bgcolor = COLOR_BLACK;
@@ -37,7 +37,7 @@ extern "C" void lcd_show_task(void const * argument)
         }
         else if (count >= 10 && count < 20)
         {
-            LCD_printf(&tick_message, "ewvw0");
+            LCD_printf(&tick_message, "ewvw0ioxuwbqod812icuwblacubecvliurbeliurdwcqw");
         }
         else
             count = 0;

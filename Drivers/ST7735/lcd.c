@@ -83,7 +83,7 @@ void LCD_init(void)
     init_message.x0 = 4;
     init_message.y0 = ST7735Ctx.Height - 21;
     init_message.area_width = ST7735Ctx.Width;
-    init_message.area_height = 1;
+    init_message.area_height = 12;
     init_message.color = COLOR_WHITE;
     init_message.bgcolor = COLOR_BLACK;
     init_message.font = &Font_7x10;
@@ -232,12 +232,12 @@ void LCD_ShowString(struct StringHandler* handler, uint8_t *ptr)
     
     while((*ptr<='~')&&(*ptr>=' '))//判断是不是非法字符!
     {       
-        if(Xpos >= width)
+        if(Xpos + handler->font->width > width)
         {
             Xpos = handler->x0;
             Ypos += handler->font->height;
         }
-        if (Ypos >= height)
+        if (Ypos + handler->font->height > height)
             break;  //退出
         LCD_WriteChar(Xpos, Ypos, *ptr, handler->font, handler->color, handler->bgcolor);
         Xpos += handler->font->width;
@@ -245,10 +245,20 @@ void LCD_ShowString(struct StringHandler* handler, uint8_t *ptr)
     }
     
     // 当字符显示区域发生变化时，清除原来的像素
-    if (handler->last.x_end - Xpos > 0)
+    if (handler->last.y_end - Ypos > 0)  // 多行
     {
-        ST7735_LCD_Driver.FillRect(&st7735_pObj, Xpos, Ypos, handler->last.x_end - Xpos, 
-                                    handler->font->height, COLOR_BLACK);
+        ST7735_LCD_Driver.FillRect(&st7735_pObj, Xpos, Ypos, width - Xpos, 
+                                        handler->font->height, COLOR_BLACK);
+        ST7735_LCD_Driver.FillRect(&st7735_pObj, handler->x0, Ypos + handler->font->height, handler->area_width, 
+                                        handler->last.y_end - Ypos, COLOR_BLACK);
+    }
+    else // 单行
+    {
+        if (handler->last.x_end - Xpos > 0)
+        {
+            ST7735_LCD_Driver.FillRect(&st7735_pObj, Xpos, Ypos, handler->last.x_end - Xpos, 
+                                        handler->font->height, COLOR_BLACK);
+        }
     }
     handler->last.x_end = Xpos;
     handler->last.y_end = Ypos;
