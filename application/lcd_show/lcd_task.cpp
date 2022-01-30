@@ -18,20 +18,33 @@ extern "C" void lcd_show_task(void const * argument)
     tick_message.color = COLOR_TIANYIBLUE;
     //tick_message.bgcolor = COLOR_BLACK;
     
-    get_time_period(&lcd_time);
+    int count = 0;
+    
+    //get_time_period(&lcd_time);
 
     for (;;)
     {
         get_time_period(&lcd_time);
-        tick_message.x0 = 4;
-        tick_message.y0 = 60;
-        LCD_printf(&tick_message, "T: %d", (uint32_t)lcd_time.Now_Time);
+//        tick_message.x0 = 4;
+//        tick_message.y0 = 60;
+//        LCD_printf(&tick_message, "T: %d", (uint32_t)lcd_time.Now_Time);
         tick_message.x0 = 4;
         tick_message.y0 = 72;
-        LCD_printf(&tick_message, "DT: %d", (uint32_t)lcd_time.Time_Delta_INT);
-        //usb_printf("%d", lcd_time.Time_Delta_INT);
+        
+        if (count < 10)
+        {
+            LCD_printf(&tick_message, "cuiowebnco");
+        }
+        else if (count >= 10 && count < 20)
+        {
+            LCD_printf(&tick_message, "ewvw0");
+        }
+        else
+            count = 0;
        
         LCD_WriteChar(1, 1, 'M', &Font_11x18, COLOR_TIANYIBLUE, COLOR_BLACK);
+        
+        ++count;
         
         osDelay(50);
     }

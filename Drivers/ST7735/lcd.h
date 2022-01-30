@@ -28,6 +28,11 @@ extern "C" {
 #define COLOR_LIGHTBLUE     0X7D7C	//Ç³À¶É«  
 #define COLOR_GRAYBLUE      0X5458 //»ÒÀ¶É«
 #define COLOR_TIANYIBLUE    0X667F
+    
+struct LastPrint {
+    uint8_t x_end;
+    uint8_t y_end;
+};
 
 struct StringHandler {
     uint8_t x0;
@@ -37,7 +42,8 @@ struct StringHandler {
     uint16_t color;
     uint16_t bgcolor;
     FontDef *font;
-    uint8_t last_width;
+    
+    struct LastPrint last;
 };
 
 extern ST7735_Object_t st7735_pObj;

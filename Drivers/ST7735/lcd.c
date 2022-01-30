@@ -223,27 +223,37 @@ void LCD_WriteChar(uint16_t x, uint16_t y, char ch, FontDef* font, uint16_t colo
 }
 
 //显示字符串
-void LCD_ShowString(struct StringHandler* handler, uint8_t *p)
+void LCD_ShowString(struct StringHandler* handler, uint8_t *ptr)
 {
-    uint8_t x = handler->x0;
-    uint8_t y = handler->y0;
+    uint8_t Xpos = handler->x0;
+    uint8_t Ypos = handler->y0;
     uint16_t width = handler->x0 + handler->area_width;
     uint16_t height = handler->y0 + handler->area_height;
     
-    while((*p<='~')&&(*p>=' '))//判断是不是非法字符!
+    while((*ptr<='~')&&(*ptr>=' '))//判断是不是非法字符!
     {       
-        if(x >= width)
+        if(Xpos >= width)
         {
-            x = handler->x0;
-            y += handler->font->height;
+            Xpos = handler->x0;
+            Ypos += handler->font->height;
         }
-        if (y >= height)
+        if (Ypos >= height)
             break;  //退出
-        LCD_WriteChar(x, y, *p, handler->font, handler->color, handler->bgcolor);
-        x += handler->font->width;
-        p++;
-    }  
+        LCD_WriteChar(Xpos, Ypos, *ptr, handler->font, handler->color, handler->bgcolor);
+        Xpos += handler->font->width;
+        ptr++;
+    }
+    
+    // 当字符显示区域发生变化时，清除原来的像素
+    if (handler->last.x_end - Xpos > 0)
+    {
+        ST7735_LCD_Driver.FillRect(&st7735_pObj, Xpos, Ypos, handler->last.x_end - Xpos, 
+                                    handler->font->height, COLOR_BLACK);
+    }
+    handler->last.x_end = Xpos;
+    handler->last.y_end = Ypos;
 }
+
 
 static int32_t lcd_init(void)
 {
