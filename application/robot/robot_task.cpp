@@ -22,37 +22,39 @@ extern "C" void servo_ctrl_task(void const * argument)
     int i = 0;
     float sinin = 0;
     
-//    servo_1.export_read_state();
-//    posi_target = servo_1.get_position();
-//    
-//    servo_1.set_accelerate(20);
+    servo_2.export_read_state();
+    posi_target = servo_2.get_position();
+    
+    if (!servo_2.set_accelerate(20))
+        for (;;) { osDelay(1); }
     
     for (;;)
     {
         osDelay(20);
         
-//        get_time_period(&servo_time);
-//        ret_val = servo_1.set_position(posi_target);
-//        get_time_period(&servo_time);
-////        if (ret_val)
-////            usb_printf("Y1 %d,%d,%f,%f,%d,%f,%f\r\n", servo_1.position, servo_1.velocity, 
-////                servo_1.load_ratio, servo_1.voltage, servo_1.temperature, servo_1.current, servo_time.Time_Delta);
-////        else
-////            usb_printf("N1 %d,%d,%f,%f,%d,%f,%f\r\n", servo_1.position, servo_1.velocity, 
-////                servo_1.load_ratio, servo_1.voltage, servo_1.temperature, servo_1.current, servo_time.Time_Delta);
-//        
-//        posi_target += 10 * reserve_flag;
-//        
-//        if (posi_target > 4000)
-//        {
-//            reserve_flag = -1;
-//            posi_target = 4000;
-//        }
-//        else if (posi_target < 0)
-//        {
-//            reserve_flag = 1;
-//            posi_target = 0;
-//        }
+        get_time_period(&servo_time);
+        ret_val = servo_2.set_position(posi_target);
+        ret_val = servo_2.export_read_state();
+        get_time_period(&servo_time);
+        if (ret_val)
+            usb_printf("Y1 %d,%d,%f,%f,%d,%f,%f\r\n", servo_2.position, servo_2.velocity, 
+                servo_2.load_ratio, servo_2.voltage, servo_2.temperature, servo_2.current, servo_time.Time_Delta);
+        else
+            usb_printf("N1 %d,%d,%f,%f,%d,%f,%f\r\n", servo_2.position, servo_2.velocity, 
+                servo_2.load_ratio, servo_2.voltage, servo_2.temperature, servo_2.current, servo_time.Time_Delta);
+        
+        posi_target += 10 * reserve_flag;
+        
+        if (posi_target > 4000)
+        {
+            reserve_flag = -1;
+            posi_target = 4000;
+        }
+        else if (posi_target < 0)
+        {
+            reserve_flag = 1;
+            posi_target = 0;
+        }
 
         
 //        get_time_period(&servo_time);
@@ -64,17 +66,9 @@ extern "C" void servo_ctrl_task(void const * argument)
 //        else
 //            usb_printf("N2 %d,%d,%f,%f,%d,%f,%f\r\n", servo_2.position, servo_2.velocity, 
 //                servo_2.load_ratio, servo_2.voltage, servo_2.temperature, servo_2.current, servo_time.Time_Delta);
-        
-        //usb_printf("%d %d", sizeof(*servo_1.bus_manager), sizeof(servo_1));
+//        
+//        usb_printf("%d %d", sizeof(*servo_1.bus_manager), sizeof(servo_1));
 
-        get_time_period(&servo_time);
-        for (i = 0; i < 2000; i++)
-        {
-            arm_cos_f32(sinin);
-            sinin += 0.5;
-        }
-        get_time_period(&servo_time);
-        sinin = 1.87324;
         //usb_printf("%f", servo_time.Time_Delta);
             
     }

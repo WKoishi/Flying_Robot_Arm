@@ -104,14 +104,14 @@ extern "C" void servo_single_receive_data_ISR(const uint8_t* data_buf, const uin
     {
         command = manager_get_command(&bus_1_manager);
         
-        if (command_PING == command)
+        if (ServoCommand::PING == command)
         {
             if (manager_get_id(&bus_1_manager) == data_buf[2] && 6 == receive_len)
                 manager_set_respond_flag(&bus_1_manager);
         }
-        else if (command_READ_DATA == command)
+        else if (ServoCommand::READ_DATA == command)
         {
-            if (special_READ_STATE == bus_1_manager.special_command)
+            if (ServoSpecialCommand::READ_STATE == bus_1_manager.special_command)
             {
                 if (manager_get_id(&bus_1_manager) == data_buf[2] && 21 == receive_len )
                 {
@@ -131,10 +131,10 @@ extern "C" void servo_single_receive_data_ISR(const uint8_t* data_buf, const uin
                         bus_1_manager.receive_target = NULL;  //reset the point
                     }
                 }
-                bus_1_manager.special_command = special_NONE;
+                bus_1_manager.special_command = ServoSpecialCommand::NONE;
             }
         }
-        else if (command_WRITE_DATA == command)
+        else if (ServoCommand::WRITE_DATA == command)
         {
             if (manager_get_id(&bus_1_manager) == data_buf[2] && 6 == receive_len)
                 manager_set_respond_flag(&bus_1_manager);

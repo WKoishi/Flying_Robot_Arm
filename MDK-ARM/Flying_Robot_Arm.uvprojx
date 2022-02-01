@@ -1116,6 +1116,11 @@
               <FileType>8</FileType>
               <FilePath>..\application\lcd_show\lcd_task.cpp</FilePath>
             </File>
+            <File>
+              <FileName>lcd_message.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\application\lcd_show\lcd_message.cpp</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
