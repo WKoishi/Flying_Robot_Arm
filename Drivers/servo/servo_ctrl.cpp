@@ -1,5 +1,4 @@
 #include "servo_ctrl.h"
-#include "usb_uart.h"
 #include "string.h"
 
 bool servo_single_data_pack_send(struct ServoBusManager* manager, uint8_t id, 

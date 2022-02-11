@@ -1,6 +1,5 @@
 #include "servo_uart.h"
 #include "usart.h"
-#include "usbd_cdc_if.h"
 
 #define USE_FREERTOS
 
