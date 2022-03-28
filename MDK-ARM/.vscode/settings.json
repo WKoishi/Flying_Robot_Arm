@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "mavlink_msg_rc_channels.h": "c",
+        "usart.h": "c"
+    }
+}

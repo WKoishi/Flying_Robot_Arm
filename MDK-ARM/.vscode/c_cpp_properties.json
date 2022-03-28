@@ -20,6 +20,7 @@
                 "c:\\temp_work\\git\\Flying_Robot_Arm\\Drivers\\ST7735",
                 "c:\\temp_work\\git\\Flying_Robot_Arm\\support",
                 "c:\\temp_work\\git\\Flying_Robot_Arm\\support\\letter-shell",
+                "c:\\temp_work\\git\\Flying_Robot_Arm\\support\\mavlink",
                 "C:\\Keil_v5\\ARM\\ARMCLANG\\include",
                 "C:\\Keil_v5\\ARM\\ARMCLANG\\include\\arm_linux",
                 "C:\\Keil_v5\\ARM\\ARMCLANG\\include\\arm_linux_compat",
@@ -33,7 +34,8 @@
                 "c:\\temp_work\\git\\Flying_Robot_Arm\\Middlewares\\ST\\STM32_USB_Device_Library\\Class\\CDC\\Src",
                 "c:\\temp_work\\git\\Flying_Robot_Arm\\application\\lcd_show",
                 "c:\\temp_work\\git\\Flying_Robot_Arm\\application\\robot",
-                "c:\\temp_work\\git\\Flying_Robot_Arm\\application\\robot\\kinematic"
+                "c:\\temp_work\\git\\Flying_Robot_Arm\\application\\robot\\kinematic",
+                "c:\\temp_work\\git\\Flying_Robot_Arm\\Drivers\\pixhawk"
             ],
             "defines": [
                 "USE_HAL_DRIVER",

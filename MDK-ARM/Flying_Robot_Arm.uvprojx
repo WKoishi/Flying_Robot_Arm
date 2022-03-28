@@ -339,7 +339,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32H743xx,TFT18,ARM_MATH_CM7,ARM_MATH_MATRIX_CHECK,ARM_MATH_ROUNDING</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;       ../USB_DEVICE/App;       ../USB_DEVICE/Target;       ../Drivers/STM32H7xx_HAL_Driver/Inc;       ../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy;       ../Middlewares/Third_Party/FreeRTOS/Source/include;       ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS;       ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F;       ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc;       ../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc;       ../Drivers/CMSIS/Device/ST/STM32H7xx/Include;       ../Drivers/CMSIS/Include;       ..\application\algorithm;       ..\Drivers\servo;       ..\Drivers\ST7735;       ..\support;       ..\support\letter-shell</IncludePath>
+              <IncludePath>../Core/Inc; ../USB_DEVICE/App; ../USB_DEVICE/Target; ../Drivers/STM32H7xx_HAL_Driver/Inc; ../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy; ../Middlewares/Third_Party/FreeRTOS/Source/include; ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS; ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F; ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc; ../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc; ../Drivers/CMSIS/Device/ST/STM32H7xx/Include; ../Drivers/CMSIS/Include; ..\application\algorithm; ..\Drivers\servo; ..\Drivers\ST7735; ..\support; ..\support\letter-shell; ..\support\mavlink</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -1195,6 +1195,16 @@
               <FileName>st7735_reg.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Drivers\ST7735\st7735_reg.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>driver/pixhawk</GroupName>
+          <Files>
+            <File>
+              <FileName>px4_uart.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Drivers\pixhawk\px4_uart.c</FilePath>
             </File>
           </Files>
         </Group>
